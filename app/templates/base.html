@@ -82,46 +82,12 @@
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-user"></i>
-                        <span>XX管理</span>
+                        <span>客户管理</span>
                         <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="{{ url_for('main.notifyedit') }}"><i class="fa fa-circle-o"></i> 编辑</a></li>
-                        <li><a href="{{ url_for('main.notifylist') }}"><i class="fa fa-circle-o"></i> 查询</a></li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-bug"></i>
-                        <span>XX管理</span>
-                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="{{ url_for('main.notifyedit') }}"><i class="fa fa-circle-o"></i> 编辑</a></li>
-                        <li><a href="{{ url_for('main.notifylist') }}"><i class="fa fa-circle-o"></i> 查询</a></li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-send"></i>
-                        <span>XX管理</span>
-                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="{{ url_for('main.notifyedit') }}"><i class="fa fa-circle-o"></i> 编辑</a></li>
-                        <li><a href="{{ url_for('main.notifylist') }}"><i class="fa fa-circle-o"></i> 查询</a></li>
-                    </ul>
-                </li>
-
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-cog"></i>
-                        <span>XX管理</span>
-                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="{{ url_for('main.notifyedit') }}"><i class="fa fa-circle-o"></i> 功能点</a></li>
-                        <li><a href="{{ url_for('main.notifylist') }}"><i class="fa fa-circle-o"></i> 功能点</a></li>
+                        <li><a href="{{ url_for('main.client_list') }}"><i class="fa fa-table"></i> 列表</a></li>
+                        <li><a href="{{ url_for('main.client_card') }}"><i class="fa fa-id-card-o"></i> 卡片</a></li>
                     </ul>
                 </li>
             </ul>
@@ -142,7 +108,7 @@
         <div class="pull-right hidden-xs">
             <b>版本号</b> 1.0.0
         </div>
-        Copyright &copy; 2017 <a href="http://www.si-tech.com.cn">XXXX公司</a>
+        Copyright &copy; 2017 <a href="http://www.et.com.cn">ET公司</a>
     </footer>
     <!--模态窗口-->
     <div class="modal-wrapper">

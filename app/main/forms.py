@@ -11,3 +11,6 @@ class CfgNotifyForm(FlaskForm):
     notify_number = StringField('通知号码', validators=[DataRequired(message='不能为空'), Length(0, 64, message='长度不正确')])
     status = BooleanField('生效标识', default=True)
     submit = SubmitField('提交')
+
+class ClientForm(FlaskForm):
+    pass

@@ -1,16 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from peewee import MySQLDatabase, Model, CharField, BooleanField, IntegerField
-import json
+from peewee import SqliteDatabase, MySQLDatabase, Model, CharField, BooleanField, IntegerField
+from playhouse.shortcuts import dict_to_model, model_to_dict
 from werkzeug.security import check_password_hash
 from flask_login import UserMixin
 from app import login_manager
 from conf.config import config
+import json
 import os
 
 cfg = config[os.getenv('FLASK_CONFIG') or 'default']
 
-db = MySQLDatabase(host=cfg.DB_HOST, user=cfg.DB_USER, passwd=cfg.DB_PASSWD, database=cfg.DB_DATABASE)
+# db = MySQLDatabase(host=cfg.DB_HOST, user=cfg.DB_USER,
+#    passwd=cfg.DB_PASSWD, database=cfg.DB_DATABASE)
+db = SqliteDatabase(cfg.DB_FILE)
 
 
 class BaseModel(Model):
@@ -27,8 +30,13 @@ class BaseModel(Model):
         # return str(r)
         return json.dumps(r, ensure_ascii=False)
 
+    def to_dict(self):
+        return model_to_dict(self)
+        
 
 # 管理员工号
+
+
 class User(UserMixin, BaseModel):
     username = CharField()  # 用户名
     password = CharField()  # 密码
@@ -50,6 +58,30 @@ class CfgNotify(BaseModel):
     status = BooleanField(default=True)  # 生效失效标识
 
 
+class Client(BaseModel):
+    name = CharField()
+    company = CharField()
+    position = CharField()
+    group = CharField()
+    phone = CharField()
+    wechat = CharField()
+    dingding = CharField()
+    qq = CharField()
+    email = CharField()
+    company_address = CharField()
+    home_address = CharField()
+    tag = CharField()
+    preference = CharField()
+    relation = CharField()
+    cohesion = CharField()
+    network = CharField()
+    short_term = CharField()
+    long_term = CharField()
+    attr1 = CharField()
+    attr2 = CharField()
+    attr3 = CharField()
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.get(User.id == int(user_id))
@@ -58,8 +90,5 @@ def load_user(user_id):
 # 建表
 def create_table():
     db.connect()
-    db.create_tables([CfgNotify, User])
+    db.create_tables([CfgNotify, User, Client])
 
-
-if __name__ == '__main__':
-    create_table()

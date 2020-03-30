@@ -1,0 +1,116 @@
+[
+    {
+        "field": "state",
+        "checkbox": true,
+        "align": "center"
+    },
+    {
+        "title": "ID",
+        "field": "id",
+        "align": "center",
+        "sortable": true
+    },
+    {
+        "field": "name",
+        "title": "姓名",
+        "sortable": true
+    },
+    {
+        "field": "company",
+        "title": "公司",
+        "sortable": true
+    },
+    {
+        "field": "position",
+        "title": "职位",
+        "sortable": true
+    },
+    {
+        "field": "group",
+        "title": "群组",
+        "sortable": true
+    },
+    {
+        "field": "phone",
+        "title": "电话"
+    },
+    {
+        "field": "wechat",
+        "title": "微信",
+        "visible": false
+    },
+    {
+        "field": "dingding",
+        "title": "钉钉",
+        "visible": false
+    },
+    {
+        "field": "qq",
+        "title": "QQ",
+        "visible": false
+    },
+    {
+        "field": "email",
+        "title": "邮箱",
+        "visible": false
+    },
+    {
+        "field": "company_address",
+        "title": "公司地址",
+        "visible": false
+    },
+    {
+        "field": "home_address",
+        "title": "家庭住址",
+        "visible": false
+    },
+    {
+        "field": "tag",
+        "title": "个性标签"
+    },
+    {
+        "field": "preference",
+        "title": "偏好",
+        "visible": false
+    },
+    {
+        "field": "relation",
+        "title": "关联方",
+        "visible": false
+    },
+    {
+        "field": "cohesion",
+        "title": "亲密度",
+        "sortable": true
+    },
+    {
+        "field": "network",
+        "title": "关系网络",
+        "visible": false
+    },
+    {
+        "field": "short_term",
+        "title": "短期诉求",
+        "visible": false
+    },
+    {
+        "field": "long_term",
+        "title": "中长期机会",
+        "visible": false
+    },
+    {
+        "field": "attr1",
+        "title": "扩展字段1",
+        "visible": false
+    },
+    {
+        "field": "attr2",
+        "title": "扩展字段2",
+        "visible": false
+    },
+    {
+        "field": "attr3",
+        "title": "扩展字段3",
+        "visible": false
+    }
+]

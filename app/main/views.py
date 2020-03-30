@@ -1,14 +1,23 @@
 from app import get_logger, get_config
 import math
+import json
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
+from flask import jsonify
 from app import utils
-from app.models import CfgNotify
+from app.models import CfgNotify, Client
 from app.main.forms import CfgNotifyForm
+from app.utils import load_mapping, import_excel
+from peewee import SQL
+from werkzeug.utils import secure_filename
 from . import main
+import os
+from conf.config import config
+
 
 logger = get_logger(__name__)
 cfg = get_config()
+
 
 # 通用列表查询
 def common_list(DynamicModel, view):
@@ -16,7 +25,8 @@ def common_list(DynamicModel, view):
     action = request.args.get('action')
     id = request.args.get('id')
     page = int(request.args.get('page')) if request.args.get('page') else 1
-    length = int(request.args.get('length')) if request.args.get('length') else cfg.ITEMS_PER_PAGE
+    length = int(request.args.get('length')) if request.args.get(
+        'length') else cfg.ITEMS_PER_PAGE
 
     # 删除操作
     if action == 'del' and id:
@@ -31,7 +41,8 @@ def common_list(DynamicModel, view):
     total_count = query.count()
 
     # 处理分页
-    if page: query = query.paginate(page, length)
+    if page:
+        query = query.paginate(page, length)
 
     dict = {'content': utils.query_to_list(query), 'total_count': total_count,
             'total_page': math.ceil(total_count / length), 'page': page, 'length': length}
@@ -92,3 +103,95 @@ def notifylist():
 @login_required
 def notifyedit():
     return common_edit(CfgNotify, CfgNotifyForm(), 'notifyedit.html')
+
+# 通知方式配置
+@main.route('/clientlist', methods=['GET'])
+@login_required
+def client_list():
+    return render_template('clientlist.html', current_user=current_user)
+
+# 通知方式配置
+@main.route('/clientcard', methods=['GET'])
+@login_required
+def client_card():
+    return render_template('clientcard.html', current_user=current_user)
+
+
+@main.route('/client', methods=['GET', 'POST'])
+@login_required
+def client():
+    print(current_user.username)
+    limit = int(request.values.get('limit', cfg.ITEMS_PER_PAGE))
+    limit = limit if limit > 0 else cfg.ITEMS_PER_PAGE
+
+    offset = (int(request.values.get('offset', 0)) / limit)
+    order = 'asc' if request.args.get('order', 'asc') == 'asc' else 'desc'
+
+    query = Client.select()
+    search = request.args.get('search')
+    if search is not None and '' != search:
+        query = query.where(Client.name % ('*'+search+'*'))
+
+    sort = request.args.get('sort')
+    if sort is not None:
+        sql_sort = SQL(sort).asc() if order == 'asc' else SQL(sort).desc()
+        query = query.order_by(sql_sort)
+
+    all = query.paginate(offset+1, limit)
+
+    total = Client.select().count()
+    result = {
+        'total': total,
+        'totalNotFiltered': total,
+        'rows': [p.to_dict() for p in all]
+    }
+    return result
+
+
+@main.route('/tablemapping', methods=['GET', 'POST'])
+def table_mapping():
+    mapping = load_mapping('table_mapping')
+    result = {
+        'mapping': mapping
+    }
+    return result
+
+
+@main.route('/cardmapping', methods=['GET', 'POST'])
+def card_mapping():
+    mapping = load_mapping('card_mapping')
+    result = {
+        'mapping': mapping
+    }
+    return result
+
+
+@main.route('/upload', methods=['POST'])
+def upload_file():
+    f = request.files['file']
+    filename = secure_filename(f.filename)
+    filepath = os.path.join(cfg.UPLOAD_FOLDER, filename)
+    f.save(filepath)
+
+    result = {
+        'files': [
+            {
+                'id':   '1',
+                'name': secure_filename(f.filename),
+                'type': 'xls',
+                'size': 1,
+                'url':  ''
+            }
+        ]
+    }
+
+    clients = import_excel(filepath)
+    if len(clients) == 0:
+        return result
+
+    # 删除所有数据
+    Client.delete().execute()
+    # 插入所有数据
+    Client.insert_many(clients).execute()
+
+    return result

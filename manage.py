@@ -17,5 +17,16 @@ def test():
     unittest.TextTestRunner(verbosity=2).run(tests)
 
 
+@manager.command
+def createtable():
+    from app.models import create_table
+    create_table()
+
+@manager.command
+def testexcel():
+    from app.utils import import_excel
+    import_excel('data/management sheet.xlsx')
+
+
 if __name__ == '__main__':
     manager.run()

@@ -4,11 +4,12 @@ import html
 import json
 import datetime
 from urllib.parse import unquote
-from app.models import CfgNotify
+from app.models import CfgNotify, Client
 from flask import Response, flash
+from playhouse.shortcuts import dict_to_model, model_to_dict
+from openpyxl import load_workbook
 
-
-## 字符串转字典
+# 字符串转字典
 def str_to_dict(dict_str):
     if isinstance(dict_str, str) and dict_str != '':
         new_dict = json.loads(dict_str)
@@ -17,7 +18,7 @@ def str_to_dict(dict_str):
     return new_dict
 
 
-## URL解码
+# URL解码
 def urldecode(raw_str):
     return unquote(raw_str)
 
@@ -27,7 +28,7 @@ def html_unescape(raw_str):
     return html.unescape(raw_str)
 
 
-## 键值对字符串转JSON字符串
+# 键值对字符串转JSON字符串
 def kvstr_to_jsonstr(kvstr):
     kvstr = urldecode(kvstr)
     kvstr_list = kvstr.split('&')
@@ -36,7 +37,8 @@ def kvstr_to_jsonstr(kvstr):
         key = kvstr.split('=')[0]
         value = kvstr.split('=')[1]
         json_dict[key] = value
-    json_str = json.dumps(json_dict, ensure_ascii=False, default=datetime_handler)
+    json_str = json.dumps(json_dict, ensure_ascii=False,
+                          default=datetime_handler)
     return json_str
 
 
@@ -55,7 +57,8 @@ def obj_to_dict(obj, exclude=None):
     dict = obj.__dict__['_data']
     if exclude:
         for key in exclude:
-            if key in dict: dict.pop(key)
+            if key in dict:
+                dict.pop(key)
     return dict
 
 
@@ -71,7 +74,8 @@ def query_to_list(query, exclude=None):
 # 封装HTTP响应
 def jsonresp(jsonobj=None, status=200, errinfo=None):
     if status >= 200 and status < 300:
-        jsonstr = json.dumps(jsonobj, ensure_ascii=False, default=datetime_handler)
+        jsonstr = json.dumps(jsonobj, ensure_ascii=False,
+                             default=datetime_handler)
         return Response(jsonstr, mimetype='application/json', status=status)
     else:
         return Response('{"errinfo":"%s"}' % (errinfo,), mimetype='application/json', status=status)
@@ -118,3 +122,38 @@ def flash_errors(form):
                 getattr(form, field).label.text,
                 error
             ))
+
+
+def load_mapping(file):
+    mapping = []
+    with open("./data/%s.json" % file) as f:
+        json_str = f.read()
+        mapping = json.loads(json_str)
+
+    return mapping
+
+
+def import_excel(filename):
+
+    excel = load_workbook(filename)
+
+    # 获取sheet：
+    table = excel._sheets[0]  # 通过表名获取
+    # 获取行数和列数：
+    row_num = table.max_row  # 获取行数
+    col_num = table.max_column  # 获取列数
+
+    mapping = load_mapping('table_mapping')
+    clients = []
+    # 从第2行开始
+    for row in table.iter_rows(min_row=2, max_col=col_num, max_row=row_num):
+        row_data = {}
+        idx = 1  # 第0个是state
+        for cell in row:
+            row_data[mapping[idx]['field']] = cell.value
+            idx += 1
+
+        #client = dict_to_model(Client, row_data)
+        clients.append(row_data)
+
+    return clients
