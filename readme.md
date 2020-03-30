@@ -7,19 +7,6 @@ flask-adminlte-handler是一个Python环境下的WEB后台管理系统脚手架�
 3. ORM框架使用Peewee
 4. 前端套用基于BootStrap的AdminLTE模板
 
-## 系统截图
-- 登录页  
-![](http://oh0ra6igz.bkt.clouddn.com/0ot1s.jpg)
-
-- 主页  
-![](http://oh0ra6igz.bkt.clouddn.com/644d6.jpg)
-
-- 编辑界面  
-![](http://oh0ra6igz.bkt.clouddn.com/fojv1.jpg)  
-
-- 查询界面  
-![](http://oh0ra6igz.bkt.clouddn.com/vvelb.jpg)
-
 
 ## 第三方依赖
 - peewee
@@ -86,6 +73,18 @@ nohup ./manage.py runserver 2>&1 &
 - /app/models.py  Peewee模型
 - /app/utils.py  工具模块
 - /conf  系统参数及日志配置
+
+## 定制功能
+### 第一期
+1. 录入客户信息
+2. 列表和卡片展示客户信息
+
+### 第二期
+1. 不同的员工输入不可见，管理员能看到所有客户
+2. 信息增删改功能作为零星增删修改，增加“批量操作”功能，即对单一要素，批量修改，这样就不需要每次都导excel；excel作为初次数据或重大数据更改时，批量导入。
+3. 不需要所有表头都筛选。表头“个性标签”输入时不同标签数据可否用分号隔开，例如：苹果; 香蕉；雪梨，然后显示成一个一个小方块。
+4. 增加3个自定义字段，后期我如何修改？
+5. 打印需要给样例，稍后我做一个范例给你
 
 
 ## 相关学习文档
