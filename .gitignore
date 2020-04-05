@@ -53,3 +53,7 @@ node_modules
 /logs
 /export
 /__bak
+log/app.log
+log/app.log
+nohup.out
+log/app.log

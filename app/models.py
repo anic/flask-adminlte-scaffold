@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from peewee import SqliteDatabase, MySQLDatabase, Model, CharField, BooleanField, IntegerField
+from peewee import SqliteDatabase, MySQLDatabase, Model, CharField, BooleanField, IntegerField, ForeignKeyField
 from playhouse.shortcuts import dict_to_model, model_to_dict
 from werkzeug.security import check_password_hash
 from flask_login import UserMixin
@@ -32,7 +32,7 @@ class BaseModel(Model):
 
     def to_dict(self):
         return model_to_dict(self)
-        
+
 
 # 管理员工号
 
@@ -44,10 +44,24 @@ class User(UserMixin, BaseModel):
     email = CharField()  # 邮箱
     phone = CharField()  # 电话
     status = BooleanField(default=True)  # 生效失效标识
+    permission = IntegerField() # 权限
 
     def verify_password(self, raw_password):
         return check_password_hash(self.password, raw_password)
 
+    def can(self, permission):
+        return self.permission is not None and (self.permission & permission) == permission
+ 
+    def is_admin(self):
+        return self.can(Permission.ADMIN)
+
+    def to_dict(self):
+        self.password = ''
+        return model_to_dict(self)
+
+class Permission:
+    ADMIN = 0x01
+    COMMON = 0x02
 
 # 通知人配置
 class CfgNotify(BaseModel):
@@ -80,6 +94,7 @@ class Client(BaseModel):
     attr1 = CharField()
     attr2 = CharField()
     attr3 = CharField()
+    creator = ForeignKeyField(User, related_name="creator")
 
 
 @login_manager.user_loader
@@ -91,4 +106,3 @@ def load_user(user_id):
 def create_table():
     db.connect()
     db.create_tables([CfgNotify, User, Client])
-

@@ -108,19 +108,19 @@ def notifyedit():
 @main.route('/clientlist', methods=['GET'])
 @login_required
 def client_list():
-    return render_template('clientlist.html', current_user=current_user)
+    return render_template('main/clientlist.html', current_user=current_user)
 
 # 通知方式配置
 @main.route('/clientcard', methods=['GET'])
 @login_required
 def client_card():
-    return render_template('clientcard.html', current_user=current_user)
+    return render_template('main/clientcard.html', current_user=current_user)
 
 
 @main.route('/client', methods=['GET', 'POST'])
 @login_required
 def client():
-    print(current_user.username)
+    # print(current_user.username)
     limit = int(request.values.get('limit', cfg.ITEMS_PER_PAGE))
     limit = limit if limit > 0 else cfg.ITEMS_PER_PAGE
 
@@ -148,7 +148,7 @@ def client():
     return result
 
 
-@main.route('/tablemapping', methods=['GET', 'POST'])
+@main.route('/table_mapping', methods=['GET', 'POST'])
 def table_mapping():
     mapping = load_mapping('table_mapping')
     result = {
@@ -157,7 +157,7 @@ def table_mapping():
     return result
 
 
-@main.route('/cardmapping', methods=['GET', 'POST'])
+@main.route('/card_mapping', methods=['GET', 'POST'])
 def card_mapping():
     mapping = load_mapping('card_mapping')
     result = {

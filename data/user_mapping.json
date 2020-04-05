@@ -1,0 +1,39 @@
+[
+    {
+        "field": "state",
+        "checkbox": true,
+        "align": "center"
+    },
+    {
+        "title": "ID",
+        "field": "id",
+        "align": "center",
+        "sortable": true
+    },
+    {
+        "field": "username",
+        "title": "用户名",
+        "sortable": true
+    },
+    {
+        "field": "fullname",
+        "title": "姓名",
+        "sortable": true
+    },
+    {
+        "field": "email",
+        "title": "邮箱"
+    },
+    {
+        "field": "phone",
+        "title": "电话"
+    },
+    {
+        "field": "status",
+        "title": "状态"
+    },
+    {
+        "field": "permission",
+        "title": "角色"
+    }
+]

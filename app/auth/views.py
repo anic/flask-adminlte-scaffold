@@ -10,7 +10,8 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         try:
-            user = User.get(User.username == form.username.data)
+            user = User.get((User.username == form.username.data)
+             & (User.status == True))
             if user.verify_password(form.password.data):
                 login_user(user, form.rememberme.data)
                 return redirect(request.args.get('next') or url_for('main.index'))
